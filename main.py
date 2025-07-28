@@ -10,7 +10,7 @@ Added ability to receive synaptic input
 #################################
 # Load modules
 #################################
-
+import neuron
 from neuron import h
 import simrun
 h.load_file("stdrun.hoc")
@@ -33,7 +33,8 @@ print("simname = " + simname + ", fstem = " + fstem)
 
 # Parameter to set the decay time constant of GABA_A
 # synapses onto the pyramidal neuron
-myTauValue = 10  # This is an example of (one way to) 
+# Tau Value is increased to 15 because Benzodiazepines increase the post-synaptic inhibitory current, so the decay time is increased
+myTauValue = 15  # This is an example of (one way to) 
                  # how to modify synaptic parameters
                  # Look at (approx) line 77 in this
                  # file to see how this parameter is

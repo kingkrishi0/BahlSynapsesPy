@@ -26,7 +26,7 @@ class stimcell():
         self.y=0
         self.z=0
 
-        pp = h.MyNetStim(.5)
+        pp = h.NetStim(.5)
         pp.interval = 1000/8 # Gives an 8 Hz rhythm with an interval of 125 ms
         pp.number = 1e9
         pp.noise = 0 # 0 = no noise, same interval every time. 1 = maximum noise, variable interval with poisson mean of 125 ms                
@@ -81,7 +81,7 @@ class reduced_cell_model():
         self.iseg = h.Section(name='iseg', cell=self)
         self.axon = h.Section(name='axon', cell=self)
 
-    def    build_topology(self):
+    def build_topology(self):
         self.basal.connect(self.soma(0.5))
         self.apical.connect(self.soma(1))
         self.tuft.connect(self.apical(1))
@@ -348,7 +348,8 @@ class reduced_cell_model():
             syn_ = h.MyExp2Syn(sec(0.5))
             self.preInhDend_list.append(syn_)    # GABA_A Synapses onto Cell Dendrites
             syn_.tau1 = 0.5 # synaptic rise time constant in ms
-            syn_.tau2 = myTauValue # synaptic decay time constant in ms
+            # The decay time constant should be increased even more
+            syn_.tau2 = myTauValue+25 # synaptic decay time constant in ms
             syn_.e = -75 # reversal potential of the synaptic current
             self.recInhDendCurrent.append(h.Vector())        
             self.recInhDendCurrent[s].record(self.preInhDend_list[s]._ref_i)
@@ -382,5 +383,6 @@ class reduced_cell_model():
 
         # Synaptic conductances (max)
         self.excitatory_syn_weight = 0.005 # the maximum synaptic conductance in microSiemens, aka the synaptic amplitude, of the excitatory connections
-        self.inhDend_syn_weight = 0.015 # the maximum synaptic conductance of the inhibitory connections onto the dendrites
+        # The weight of the inhibitory synapse should be more powerful to further inhibit the response
+        self.inhDend_syn_weight = 0.03 # the maximum synaptic conductance of the inhibitory connections onto the dendrites
         self.inhSoma_syn_weight = 0.03 # the maximum synaptic conductance of the inhibitory connections onto the soma
